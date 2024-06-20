@@ -88,6 +88,23 @@ python Controller/controller.py
    - **E**: Camera down (Y button equivalent)
    - **Ctrl+C**: Quit program
 
+### Sensitivity and Deadzone Controls
+
+The controller supports real-time adjustment of stick sensitivity and deadzone settings:
+
+**Left Stick Controls:**
+- **Sensitivity**: Keys 1-0 (0.1 to 1.0)
+- **Deadzone**: Keys Q/W/E/R (0.0 to 0.3)
+
+**Right Stick Controls:**
+- **Sensitivity**: Keys F/G/H/J/K/L (0.1 to 0.6)
+- **Deadzone**: Keys Z/X/C/V (0.0 to 0.3)
+
+**Settings Explained:**
+- **Sensitivity**: Controls how responsive the stick is (0.1 = very slow, 1.0 = normal, 2.0 = very fast)
+- **Deadzone**: Prevents drift by ignoring small movements (0.0 = no deadzone, 0.5 = 50% deadzone)
+- **Exponential**: Adjusts the response curve (1.0 = linear, higher = more sensitive at edges)
+
 ### Button Mapping Reference
 
 | Controller Button | Action | Keyboard Equivalent |
@@ -131,6 +148,9 @@ The ground station sends these commands to the rover:
 - **Button Mapping**: Comprehensive mapping of all controller buttons to rover actions
 - **Automatic Fallback**: Keyboard controls activate when controller disconnects
 - **Real-time Feedback**: Console output showing current input values and button presses
+- **Sensitivity Control**: Adjustable stick sensitivity for fine-tuned control
+- **Deadzone Management**: Configurable deadzones to prevent stick drift
+- **Exponential Response**: Customizable response curves for precise control
 
 ### Button Actions
 - **Emergency Stop**: Immediate halt of all rover movement
@@ -182,6 +202,12 @@ The ground station sends these commands to the rover:
    - Verify controller button layout matches expected mapping
    - Test with keyboard equivalents
 
+6. **Stick Too Sensitive/Not Responsive:**
+   - Adjust sensitivity using keyboard controls (1-0 for left stick, F-L for right stick)
+   - Increase deadzone if experiencing drift (Q-R for left stick, Z-V for right stick)
+   - Check exponential settings in the code if needed
+   - Verify controller calibration in system settings
+
 ## Development Notes
 
 ### Button Mapping Implementation
@@ -194,4 +220,20 @@ The code assumes a standard controller layout (Xbox-style). If using a different
 New button actions can be easily added by:
 1. Adding the action to the `button_actions` dictionary
 2. Implementing the corresponding rover command
-3. Updating the Arduino code to handle the new command 
+3. Updating the Arduino code to handle the new command
+
+### Sensitivity System
+The sensitivity and deadzone system provides three levels of control:
+1. **Deadzone**: Filters out small movements to prevent drift
+2. **Sensitivity**: Scales the response magnitude
+3. **Exponential**: Adjusts the response curve for fine control
+
+The system processes raw stick input through these stages:
+1. Apply deadzone filtering
+2. Normalize remaining range
+3. Apply sensitivity scaling
+4. Apply exponential curve
+5. Clamp to valid range (-1.0 to 1.0)
+
+### Real-time Adjustment
+Sensitivity and deadzone can be adjusted in real-time using keyboard controls, making it easy to fine-tune the control feel without restarting the program. 

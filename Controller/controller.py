@@ -15,6 +15,20 @@ lx, ly, rx, ry = 0.0, 0.0, 0.0, 0.0
 controller_connected = False
 keyboard_active = False
 
+# Sensitivity and Deadzone Settings
+CONTROL_SETTINGS = {
+    'left_stick': {
+        'sensitivity': 1.0,    # 0.1 to 2.0 (0.1 = very slow, 2.0 = very fast)
+        'deadzone': 0.1,       # 0.0 to 0.5 (0.0 = no deadzone, 0.5 = 50% deadzone)
+        'exponential': 1.5     # 1.0 to 3.0 (1.0 = linear, higher = more sensitive at edges)
+    },
+    'right_stick': {
+        'sensitivity': 1.0,
+        'deadzone': 0.1,
+        'exponential': 1.5
+    }
+}
+
 # Button mapping for rover actions
 button_actions = {
     'A': 'STOP',           # Emergency stop
@@ -50,6 +64,60 @@ TRIGGER_AXES = {
     5: 'RT',     # Right trigger
 }
 
+def apply_deadzone(value, deadzone):
+    """Apply deadzone to a stick value"""
+    if abs(value) < deadzone:
+        return 0.0
+    # Normalize the value after deadzone
+    sign = 1 if value > 0 else -1
+    normalized = (abs(value) - deadzone) / (1.0 - deadzone)
+    return sign * normalized
+
+def apply_sensitivity(value, sensitivity, exponential):
+    """Apply sensitivity and exponential curve to a stick value"""
+    # Apply exponential curve for more precise control
+    sign = 1 if value > 0 else -1
+    abs_value = abs(value)
+    curved = abs_value ** exponential
+    return sign * curved * sensitivity
+
+def process_stick_input(raw_value, stick_type):
+    """Process raw stick input with deadzone, sensitivity, and exponential curve"""
+    settings = CONTROL_SETTINGS[stick_type]
+    
+    # Apply deadzone first
+    if abs(raw_value) < settings['deadzone']:
+        return 0.0
+    
+    # Normalize after deadzone
+    sign = 1 if raw_value > 0 else -1
+    normalized = (abs(raw_value) - settings['deadzone']) / (1.0 - settings['deadzone'])
+    normalized = sign * normalized
+    
+    # Apply sensitivity and exponential curve
+    processed = apply_sensitivity(normalized, settings['sensitivity'], settings['exponential'])
+    
+    # Clamp to valid range
+    return max(-1.0, min(1.0, processed))
+
+def adjust_sensitivity(stick_type, new_sensitivity):
+    """Adjust sensitivity for a specific stick"""
+    if 0.1 <= new_sensitivity <= 2.0:
+        CONTROL_SETTINGS[stick_type]['sensitivity'] = new_sensitivity
+        print(f"\n⚙️ {stick_type.replace('_', ' ').title()} sensitivity set to: {new_sensitivity}")
+
+def adjust_deadzone(stick_type, new_deadzone):
+    """Adjust deadzone for a specific stick"""
+    if 0.0 <= new_deadzone <= 0.5:
+        CONTROL_SETTINGS[stick_type]['deadzone'] = new_deadzone
+        print(f"\n⚙️ {stick_type.replace('_', ' ').title()} deadzone set to: {new_deadzone}")
+
+def adjust_exponential(stick_type, new_exponential):
+    """Adjust exponential curve for a specific stick"""
+    if 1.0 <= new_exponential <= 3.0:
+        CONTROL_SETTINGS[stick_type]['exponential'] = new_exponential
+        print(f"\n⚙️ {stick_type.replace('_', ' ').title()} exponential set to: {new_exponential}")
+
 def handle_button_press(button_name):
     """Handle button press and return the corresponding action"""
     if button_name in button_actions:
@@ -67,6 +135,15 @@ def handle_button_release(button_name):
         button_states[action] = False
         print(f"\n🔘 Button {button_name} released: {action}")
 
+def print_control_settings():
+    """Print current control settings"""
+    print("\n⚙️ Current Control Settings:")
+    for stick_type, settings in CONTROL_SETTINGS.items():
+        print(f"   {stick_type.replace('_', ' ').title()}:")
+        print(f"     Sensitivity: {settings['sensitivity']}")
+        print(f"     Deadzone: {settings['deadzone']}")
+        print(f"     Exponential: {settings['exponential']}")
+
 # Try to initialize controller
 if pygame.joystick.get_count() > 0:
     try:
@@ -78,6 +155,10 @@ if pygame.joystick.get_count() > 0:
         print("🔘 Button mapping enabled:")
         for button, action in button_actions.items():
             print(f"   {button}: {action}")
+        print_control_settings()
+        print("\n💡 Sensitivity Controls:")
+        print("   Left Stick: 1/2/3/4/5/6/7/8/9/0 (sensitivity), Q/W/E/R (deadzone)")
+        print("   Right Stick: F/G/H/J/K/L (sensitivity), Z/X/C/V (deadzone)")
     except:
         controller_connected = False
 
@@ -115,12 +196,43 @@ try:
                         handle_button_press(trigger_name)
                     elif event.value < 0.1:  # Release threshold
                         handle_button_release(trigger_name)
+            
+            # Handle keyboard sensitivity adjustments
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_1: adjust_sensitivity('left_stick', 0.1)
+                elif event.key == pygame.K_2: adjust_sensitivity('left_stick', 0.2)
+                elif event.key == pygame.K_3: adjust_sensitivity('left_stick', 0.3)
+                elif event.key == pygame.K_4: adjust_sensitivity('left_stick', 0.4)
+                elif event.key == pygame.K_5: adjust_sensitivity('left_stick', 0.5)
+                elif event.key == pygame.K_6: adjust_sensitivity('left_stick', 0.6)
+                elif event.key == pygame.K_7: adjust_sensitivity('left_stick', 0.7)
+                elif event.key == pygame.K_8: adjust_sensitivity('left_stick', 0.8)
+                elif event.key == pygame.K_9: adjust_sensitivity('left_stick', 0.9)
+                elif event.key == pygame.K_0: adjust_sensitivity('left_stick', 1.0)
+                
+                elif event.key == pygame.K_f: adjust_sensitivity('right_stick', 0.1)
+                elif event.key == pygame.K_g: adjust_sensitivity('right_stick', 0.2)
+                elif event.key == pygame.K_h: adjust_sensitivity('right_stick', 0.3)
+                elif event.key == pygame.K_j: adjust_sensitivity('right_stick', 0.4)
+                elif event.key == pygame.K_k: adjust_sensitivity('right_stick', 0.5)
+                elif event.key == pygame.K_l: adjust_sensitivity('right_stick', 0.6)
+                
+                # Deadzone adjustments
+                elif event.key == pygame.K_q: adjust_deadzone('left_stick', 0.0)
+                elif event.key == pygame.K_w: adjust_deadzone('left_stick', 0.1)
+                elif event.key == pygame.K_e: adjust_deadzone('left_stick', 0.2)
+                elif event.key == pygame.K_r: adjust_deadzone('left_stick', 0.3)
+                
+                elif event.key == pygame.K_z: adjust_deadzone('right_stick', 0.0)
+                elif event.key == pygame.K_x: adjust_deadzone('right_stick', 0.1)
+                elif event.key == pygame.K_c: adjust_deadzone('right_stick', 0.2)
+                elif event.key == pygame.K_v: adjust_deadzone('right_stick', 0.3)
         
         # Reset values each frame
         lx, ly, rx, ry = 0.0, 0.0, 0.0, 0.0
         
         if controller_connected:
-            # Check if controller got disconnected
+            # Check if controller got disconnecgited
             if pygame.joystick.get_count() == 0:
                 controller_connected = False
                 keyboard_active = True
@@ -128,10 +240,17 @@ try:
             
             # Read controller axes if still connected
             if controller_connected:
-                lx = joystick.get_axis(0)
-                ly = joystick.get_axis(1)
-                rx = joystick.get_axis(2)
-                ry = joystick.get_axis(3)
+                # Get raw values and apply processing
+                raw_lx = joystick.get_axis(0)
+                raw_ly = joystick.get_axis(1)
+                raw_rx = joystick.get_axis(2)
+                raw_ry = joystick.get_axis(3)
+                
+                # Apply deadzone, sensitivity, and exponential curve
+                lx = process_stick_input(raw_lx, 'left_stick')
+                ly = process_stick_input(raw_ly, 'left_stick')
+                rx = process_stick_input(raw_rx, 'right_stick')
+                ry = process_stick_input(raw_ry, 'right_stick')
         
         if keyboard_active:
             # Check if controller got reconnected
