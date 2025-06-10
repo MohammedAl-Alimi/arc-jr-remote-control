@@ -439,6 +439,11 @@ def toggle_blur():
     blur = 5 if blur == 0 else 0
     print(f"\n🌫️ Blur: {blur}")
 
+def toggle_noise():
+    global noise
+    noise = 10 if noise == 0 else 0
+    print(f"\n📻 Noise: {noise}")
+
 def start_recording():
     """Start recording control commands"""
     global recording, recorded_commands, recording_start_time
