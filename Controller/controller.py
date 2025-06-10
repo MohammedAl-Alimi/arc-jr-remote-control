@@ -431,7 +431,12 @@ def toggle_hue():
 def toggle_gamma():
     global gamma
     gamma = 2.0 if gamma == 1.0 else 1.0
-    print(f"\n Gamma: {gamma}")
+    print(f"\n📊 Gamma: {gamma}")
+
+def toggle_blur():
+    global blur
+    blur = 5 if blur == 0 else 0
+    print(f"\n🌫️ Blur: {blur}")
 
 def start_recording():
     """Start recording control commands"""
