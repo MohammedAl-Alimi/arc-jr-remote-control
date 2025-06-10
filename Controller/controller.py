@@ -42,6 +42,7 @@ recorded_commands = []
 recording_start_time = 0
 playback_index = 0
 playback_speed = 1.0
+blur = 0
 frame_count = 0
 last_fps_time = time.time()
 
