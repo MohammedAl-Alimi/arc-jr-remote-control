@@ -16,7 +16,6 @@ const int BUFFER_SIZE = 64;
 char serialBuffer[BUFFER_SIZE];
 int bufferIndex = 0;
 
-// Telemetry structure
 struct TelemetryData {
   float temperature;
   float humidity;
@@ -24,7 +23,7 @@ struct TelemetryData {
   uint32_t timestamp;
 };
 
-TelemetryData telemetry;
+TelemetryData telemetry; 
 
 void setup() {
   // Initialize serial communication
@@ -37,22 +36,22 @@ void setup() {
   }
   
   // Radio configuration
-  radio.setPALevel(RF24_PA_LOW);      // Set power amplifier level
-  radio.setChannel(76);               // Set RF channel
-  radio.setDataRate(RF24_250KBPS);    // Set data rate
-  radio.enableDynamicPayloads();      // Enable dynamic payloads
-  radio.setRetries(5, 15);            // Set retry count and delay
+  radio.setPALevel(RF24_PA_LOW);      
+  radio.setChannel(76);               
+  radio.setDataRate(RF24_250KBPS);    
+  radio.enableDynamicPayloads();      
+  radio.setRetries(5, 15);            
   
-  // Open pipes for communication
+
   radio.openWritingPipe(pipes[0]);
   radio.openReadingPipe(1, pipes[1]);
   
-  // Start listening
+
   radio.startListening();
 }
 
 void loop() {
-  // Handle incoming serial data from laptop
+ 
   while (Serial.available() > 0) {
     char inChar = Serial.read();
     
@@ -65,7 +64,7 @@ void loop() {
     }
   }
   
-  // Check for incoming radio data
+
   if (radio.available()) {
     radio.read(&telemetry, sizeof(telemetry));
     sendTelemetryToLaptop();
@@ -73,13 +72,13 @@ void loop() {
 }
 
 void processSerialCommand(const char* command) {
-  // Stop listening to send data
+ 
   radio.stopListening();
   
   // Send command through radio
   radio.write(command, strlen(command) + 1);
   
-  // Resume listening
+
   radio.startListening();
   
   // Echo command back to laptop for confirmation
@@ -88,7 +87,7 @@ void processSerialCommand(const char* command) {
 }
 
 void sendTelemetryToLaptop() {
-  // Format: TELEMETRY,temp,humidity,tagId,timestamp
+
   Serial.print("TELEMETRY,");
   Serial.print(telemetry.temperature);
   Serial.print(",");
@@ -97,4 +96,5 @@ void sendTelemetryToLaptop() {
   Serial.print(telemetry.tagId);
   Serial.print(",");
   Serial.println(telemetry.timestamp);
+  Serial.println("TELEMETRY SENT");
 } 
