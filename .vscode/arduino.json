@@ -1,0 +1,6 @@
+{
+    "sketch": "arduino/rover_communication/rover_communication.ino",
+    "board": "arduino:avr:uno",
+    "port": "",
+    "output": "build"
+} 
