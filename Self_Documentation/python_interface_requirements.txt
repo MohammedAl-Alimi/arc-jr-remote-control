@@ -1,0 +1,68 @@
+# Python Interface Requirements for Ground Station Control
+
+## Overview
+This document outlines the requirements and implementation details for the Python interface that will control the Arc Jr rover using keyboard input.
+
+## Required Python Packages
+1. pyserial
+   - Used for serial communication with Arduino
+   - Install using: `pip install pyserial`
+
+2. keyboard
+   - Used for reading keyboard input
+   - Install using: `pip install keyboard`
+
+## Implementation Requirements
+
+### 1. Serial Communication Setup
+- Connect to Arduino using the correct port
+- Use baud rate: 115200
+- Handle connection errors gracefully
+- Example port names:
+  - Windows: 'COM3'
+  - Linux: '/dev/ttyUSB0'
+  - Mac: '/dev/tty.usbserial-*'
+
+### 2. Keyboard Control Mapping
+- W: Send "FORWARD" command
+- S: Send "BACKWARD" command
+- A: Send "LEFT" command
+- D: Send "RIGHT" command
+- Space: Send "STOP" command
+- Q: Quit program
+
+### 3. Command Format
+- Each command should be sent as a string followed by a newline
+- Example: "FORWARD\n"
+- Wait for Arduino confirmation before sending next command
+- Handle command sending errors
+
+### 4. User Interface
+- Display current status
+- Show which keys are being pressed
+- Display command confirmation from Arduino
+- Show error messages if something goes wrong
+
+### 5. Error Handling
+- Handle serial port connection errors
+- Handle keyboard input errors
+- Handle command sending failures
+- Provide clear error messages to user
+
+## Example Command Flow
+1. User presses 'W' key
+2. Python sends "FORWARD\n" to Arduino
+3. Wait for "CMD_SENT:FORWARD" confirmation
+4. If "CMD_FAILED" received, show error message
+
+## Testing Requirements
+1. Test all keyboard controls
+2. Test error handling
+3. Test command confirmation
+4. Test program exit functionality
+
+## Notes
+- The Arduino is already set up to receive these commands
+- Commands must be exact: "FORWARD", "BACKWARD", "LEFT", "RIGHT", "STOP"
+- The Arduino will send back "CMD_SENT:" or "CMD_FAILED" for each command
+- Add a small delay (0.1s) between commands to prevent command spam 
