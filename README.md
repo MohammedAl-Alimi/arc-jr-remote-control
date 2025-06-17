@@ -1,12 +1,13 @@
 # Arduino Rover Communication
 
-This project implements the Arc Jr project's ground station control system, enabling keyboard-based control of the rover using nRF24L01+ radio module.
+This project implements the Arc Jr project's ground station control system, enabling both controller and keyboard-based control of the rover using nRF24L01+ radio module.
 
 ## Hardware Requirements
 
 - Arduino Uno
 - nRF24L01+ radio module
 - Connecting wires
+- Optional: Game Controller (for enhanced control)
 
 ## Pin Connections
 
@@ -29,6 +30,7 @@ nRF24L01+ to Arduino Uno:
 4. Required Python packages:
    - pyserial
    - keyboard
+   - pygame (for controller support)
 
 ## Installation
 
@@ -47,21 +49,32 @@ nRF24L01+ to Arduino Uno:
 
 4. Install Python requirements:
 ```bash
-pip install pyserial keyboard
+pip install pyserial keyboard pygame
 ```
 
 ## Usage
 
 ### Ground Station Control
 
-1. Run the Python control interface (to be implemented by team member)
-2. Use WASD keys to control the rover:
+1. Run the Python control interface:
+```bash
+python Controller/controller.py
+```
+
+2. Control Methods:
+
+   **Game Controller:**
+   - Left Stick: Movement control
+   - Right Stick: Camera/rotation control
+   - Automatically falls back to keyboard if controller disconnects
+
+   **Keyboard (Fallback):**
    - W: Forward
    - S: Backward
    - A: Left
    - D: Right
-   - Space: Stop
-   - Q: Quit program
+   - Hold Shift + WASD: Right stick emulation (camera control)
+   - Ctrl+C: Quit program
 
 ### Command Format
 The ground station sends these commands to the rover:
@@ -80,6 +93,8 @@ The ground station sends these commands to the rover:
 │   │   └── rover_communication.ino
 │   └── ground_station_control/        # New keyboard control code
 │       └── ground_station_control.ino
+├── Controller/
+│   └── controller.py                  # Python control interface
 └── .vscode/                          # VS Code configuration
     ├── arduino.json                  # Arduino settings
     └── c_cpp_properties.json         # C++ configuration
@@ -89,7 +104,8 @@ The ground station sends these commands to the rover:
 
 1. Ground Station Control (In Progress)
    - [x] Arduino code for receiving and transmitting commands
-   - [ ] Python interface for keyboard control
+   - [x] Python interface for keyboard control
+   - [x] Controller support with automatic fallback
    - [ ] Testing and debugging
 
 2. Rover Control
@@ -112,4 +128,10 @@ The ground station sends these commands to the rover:
 3. Command Not Received:
    - Verify radio channel settings match (76)
    - Check data rate settings (250KBPS)
-   - Ensure both radios are powered 
+   - Ensure both radios are powered
+
+4. Controller Issues:
+   - Ensure pygame is installed
+   - Check controller connection
+   - Verify controller is recognized by system
+   - If controller disconnects, keyboard controls will activate automatically 
