@@ -147,6 +147,34 @@ def reset_all_settings():
     print("\n🔄 All settings reset to default values")
     print_control_settings()
 
+def show_help_menu():
+    """Display all controls and mappings"""
+    print("\n" + "="*50)
+    print("🎮 CONTROLLER HELP MENU")
+    print("="*50)
+    print("\n📋 CONTROLLER BUTTONS:")
+    for button, action in button_actions.items():
+        print(f"   {button}: {action}")
+    
+    print("\n⚙️ SENSITIVITY CONTROLS:")
+    print("   Left Stick Sensitivity: 1/2/3/4/5/6/7/8/9/0")
+    print("   Right Stick Sensitivity: F/G/H/J/K/L")
+    print("   Left Stick Deadzone: Q/W/E/R")
+    print("   Right Stick Deadzone: Z/X/C/V")
+    print("   Y-Axis Inversion: I (left), O (right)")
+    print("   Reset All Settings: R")
+    print("   Show This Help: H")
+    
+    print("\n⌨️ KEYBOARD CONTROLS (when no controller):")
+    print("   Movement: W/S/A/D")
+    print("   Camera (hold Shift): Shift + W/S/A/D")
+    print("   Emergency Stop: Space")
+    print("   Toggle Mode: Tab")
+    print("   Camera Up/Down: Q/E")
+    
+    print("\n🛑 QUIT: Ctrl+C")
+    print("="*50)
+
 def handle_button_press(button_name):
     """Handle button press and return the corresponding action"""
     if button_name in button_actions:
@@ -267,6 +295,9 @@ try:
                 
                 # Reset all settings
                 elif event.key == pygame.K_r: reset_all_settings()
+                
+                # Show help menu
+                elif event.key == pygame.K_h: show_help_menu()
         
         # Reset values each frame
         lx, ly, rx, ry = 0.0, 0.0, 0.0, 0.0
