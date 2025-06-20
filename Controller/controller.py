@@ -1,6 +1,8 @@
 import pygame
 import time
 import sys
+import json
+import os
 
 # Initialize pygame and joystick
 pygame.init()
@@ -163,6 +165,7 @@ def show_help_menu():
     print("   Right Stick Deadzone: Z/X/C/V")
     print("   Y-Axis Inversion: I (left), O (right)")
     print("   Exponential Curve: T (left), Y (right)")
+    print("   Save Settings: S")
     print("   Reset All Settings: R")
     print("   Show This Help: H")
     
@@ -214,6 +217,31 @@ def print_control_settings():
         print(f"     Deadzone: {settings['deadzone']}")
         print(f"     Exponential: {settings['exponential']}")
 
+def save_current_settings():
+    """Save current settings to a JSON file"""
+    try:
+        settings_file = "controller_settings.json"
+        with open(settings_file, 'w') as f:
+            json.dump(CONTROL_SETTINGS, f, indent=2)
+        print(f"\n💾 Settings saved to {settings_file}")
+        print("📁 File location:", os.path.abspath(settings_file))
+    except Exception as e:
+        print(f"\n❌ Error saving settings: {e}")
+
+def load_saved_settings():
+    """Load settings from JSON file if it exists"""
+    try:
+        settings_file = "controller_settings.json"
+        if os.path.exists(settings_file):
+            with open(settings_file, 'r') as f:
+                loaded_settings = json.load(f)
+                CONTROL_SETTINGS.update(loaded_settings)
+            print(f"\n📂 Settings loaded from {settings_file}")
+            return True
+    except Exception as e:
+        print(f"\n❌ Error loading settings: {e}")
+    return False
+
 # Try to initialize controller
 if pygame.joystick.get_count() > 0:
     try:
@@ -225,12 +253,17 @@ if pygame.joystick.get_count() > 0:
         print("🔘 Button mapping enabled:")
         for button, action in button_actions.items():
             print(f"   {button}: {action}")
+        
+        # Load saved settings if available
+        load_saved_settings()
+        
         print_control_settings()
         print("\n💡 Sensitivity Controls:")
         print("   Left Stick: 1/2/3/4/5/6/7/8/9/0 (sensitivity), Q/W/E/R (deadzone)")
         print("   Right Stick: F/G/H/J/K/L (sensitivity), Z/X/C/V (deadzone)")
         print("   Y-Axis Inversion: I (left stick), O (right stick)")
         print("   Exponential Curve: T (left), Y (right)")
+        print("   Save Settings: S")
         print("   Reset All Settings: R")
         print("[MODE] Controller mode active.")
     except:
@@ -310,6 +343,9 @@ try:
                 # Exponential curve toggle controls
                 elif event.key == pygame.K_t: toggle_exponential_curve('left_stick')
                 elif event.key == pygame.K_y: toggle_exponential_curve('right_stick')
+                
+                # Save settings
+                elif event.key == pygame.K_s: save_current_settings()
                 
                 # Reset all settings
                 elif event.key == pygame.K_r: reset_all_settings()
