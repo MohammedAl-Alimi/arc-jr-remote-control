@@ -20,12 +20,14 @@ CONTROL_SETTINGS = {
     'left_stick': {
         'sensitivity': 1.0,    # 0.1 to 2.0 (0.1 = very slow, 2.0 = very fast)
         'deadzone': 0.1,       # 0.0 to 0.5 (0.0 = no deadzone, 0.5 = 50% deadzone)
-        'exponential': 1.5     # 1.0 to 3.0 (1.0 = linear, higher = more sensitive at edges)
+        'exponential': 1.5,    # 1.0 to 3.0 (1.0 = linear, higher = more sensitive at edges)
+        'invert_y': False      # Invert Y-axis
     },
     'right_stick': {
         'sensitivity': 1.0,
         'deadzone': 0.1,
-        'exponential': 1.5
+        'exponential': 1.5,
+        'invert_y': False      # Invert Y-axis
     }
 }
 
@@ -97,6 +99,10 @@ def process_stick_input(raw_value, stick_type):
     # Apply sensitivity and exponential curve
     processed = apply_sensitivity(normalized, settings['sensitivity'], settings['exponential'])
     
+    # Apply Y-axis inversion if enabled
+    if settings['invert_y']:
+        processed = -processed
+    
     # Clamp to valid range
     return max(-1.0, min(1.0, processed))
 
@@ -117,6 +123,29 @@ def adjust_exponential(stick_type, new_exponential):
     if 1.0 <= new_exponential <= 3.0:
         CONTROL_SETTINGS[stick_type]['exponential'] = new_exponential
         print(f"\n⚙️ {stick_type.replace('_', ' ').title()} exponential set to: {new_exponential}")
+
+def toggle_y_inversion(stick_type):
+    """Toggle Y-axis inversion for a specific stick"""
+    CONTROL_SETTINGS[stick_type]['invert_y'] = not CONTROL_SETTINGS[stick_type]['invert_y']
+    status = "ON" if CONTROL_SETTINGS[stick_type]['invert_y'] else "OFF"
+    print(f"\n🔄 {stick_type.replace('_', ' ').title()} Y-axis inversion: {status}")
+
+def reset_all_settings():
+    """Reset all sensitivity and deadzone settings to default values"""
+    CONTROL_SETTINGS['left_stick'] = {
+        'sensitivity': 1.0,
+        'deadzone': 0.1,
+        'exponential': 1.5,
+        'invert_y': False
+    }
+    CONTROL_SETTINGS['right_stick'] = {
+        'sensitivity': 1.0,
+        'deadzone': 0.1,
+        'exponential': 1.5,
+        'invert_y': False
+    }
+    print("\n🔄 All settings reset to default values")
+    print_control_settings()
 
 def handle_button_press(button_name):
     """Handle button press and return the corresponding action"""
@@ -159,6 +188,8 @@ if pygame.joystick.get_count() > 0:
         print("\n💡 Sensitivity Controls:")
         print("   Left Stick: 1/2/3/4/5/6/7/8/9/0 (sensitivity), Q/W/E/R (deadzone)")
         print("   Right Stick: F/G/H/J/K/L (sensitivity), Z/X/C/V (deadzone)")
+        print("   Y-Axis Inversion: I (left stick), O (right stick)")
+        print("   Reset All Settings: R")
         print("[MODE] Controller mode active.")
     except:
         controller_connected = False
@@ -229,6 +260,13 @@ try:
                 elif event.key == pygame.K_x: adjust_deadzone('right_stick', 0.1)
                 elif event.key == pygame.K_c: adjust_deadzone('right_stick', 0.2)
                 elif event.key == pygame.K_v: adjust_deadzone('right_stick', 0.3)
+                
+                # Y-axis inversion controls
+                elif event.key == pygame.K_i: toggle_y_inversion('left_stick')
+                elif event.key == pygame.K_o: toggle_y_inversion('right_stick')
+                
+                # Reset all settings
+                elif event.key == pygame.K_r: reset_all_settings()
         
         # Reset values each frame
         lx, ly, rx, ry = 0.0, 0.0, 0.0, 0.0

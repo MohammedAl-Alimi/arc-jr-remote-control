@@ -32,7 +32,7 @@ nRF24L01+ to Arduino Uno:
    - keyboard
    - pygame (for controller support)
 
-## Installation
+## Installation ::
 
 1. Install the RF24 library in Arduino IDE:
    - Tools > Manage Libraries
@@ -236,4 +236,14 @@ The system processes raw stick input through these stages:
 5. Clamp to valid range (-1.0 to 1.0)
 
 ### Real-time Adjustment
-Sensitivity and deadzone can be adjusted in real-time using keyboard controls, making it easy to fine-tune the control feel without restarting the program. 
+Sensitivity and deadzone can be adjusted in real-time using keyboard controls, making it easy to fine-tune the control feel without restarting the program.
+
+feat: add Y-axis inversion toggle for both sticks
+
+- Add invert_y setting to control configuration
+- Implement toggle_y_inversion() function
+- Add keyboard controls: I (left stick), O (right stick)
+- Update process_stick_input() to apply inversion
+- Add help text for new controls
+
+This allows users to flip the Y-axis direction for more intuitive control. 
