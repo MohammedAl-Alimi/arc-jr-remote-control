@@ -162,6 +162,7 @@ def show_help_menu():
     print("   Left Stick Deadzone: Q/W/E/R")
     print("   Right Stick Deadzone: Z/X/C/V")
     print("   Y-Axis Inversion: I (left), O (right)")
+    print("   Exponential Curve: T (left), Y (right)")
     print("   Reset All Settings: R")
     print("   Show This Help: H")
     
@@ -174,6 +175,18 @@ def show_help_menu():
     
     print("\n🛑 QUIT: Ctrl+C")
     print("="*50)
+
+def toggle_exponential_curve(stick_type):
+    """Toggle between linear and exponential response curves"""
+    current_exp = CONTROL_SETTINGS[stick_type]['exponential']
+    if current_exp == 1.0:
+        # Switch to exponential
+        CONTROL_SETTINGS[stick_type]['exponential'] = 1.5
+        print(f"\n📈 {stick_type.replace('_', ' ').title()} response: Exponential (1.5)")
+    else:
+        # Switch to linear
+        CONTROL_SETTINGS[stick_type]['exponential'] = 1.0
+        print(f"\n📈 {stick_type.replace('_', ' ').title()} response: Linear (1.0)")
 
 def handle_button_press(button_name):
     """Handle button press and return the corresponding action"""
@@ -217,6 +230,7 @@ if pygame.joystick.get_count() > 0:
         print("   Left Stick: 1/2/3/4/5/6/7/8/9/0 (sensitivity), Q/W/E/R (deadzone)")
         print("   Right Stick: F/G/H/J/K/L (sensitivity), Z/X/C/V (deadzone)")
         print("   Y-Axis Inversion: I (left stick), O (right stick)")
+        print("   Exponential Curve: T (left), Y (right)")
         print("   Reset All Settings: R")
         print("[MODE] Controller mode active.")
     except:
@@ -292,6 +306,10 @@ try:
                 # Y-axis inversion controls
                 elif event.key == pygame.K_i: toggle_y_inversion('left_stick')
                 elif event.key == pygame.K_o: toggle_y_inversion('right_stick')
+                
+                # Exponential curve toggle controls
+                elif event.key == pygame.K_t: toggle_exponential_curve('left_stick')
+                elif event.key == pygame.K_y: toggle_exponential_curve('right_stick')
                 
                 # Reset all settings
                 elif event.key == pygame.K_r: reset_all_settings()
