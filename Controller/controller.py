@@ -159,6 +159,7 @@ if pygame.joystick.get_count() > 0:
         print("\n💡 Sensitivity Controls:")
         print("   Left Stick: 1/2/3/4/5/6/7/8/9/0 (sensitivity), Q/W/E/R (deadzone)")
         print("   Right Stick: F/G/H/J/K/L (sensitivity), Z/X/C/V (deadzone)")
+        print("[MODE] Controller mode active.")
     except:
         controller_connected = False
 
@@ -166,6 +167,7 @@ if not controller_connected:
     print("❌ No controller detected. Falling back to WASD keyboard controls.")
     print("Usage: W/S for forward/backward, A/D for left/right")
     print("Hold Shift for right stick emulation (camera control)")
+    print("[MODE] Keyboard mode active.")
     keyboard_active = True
 
 try:
@@ -237,6 +239,7 @@ try:
                 controller_connected = False
                 keyboard_active = True
                 print("⚠️ Controller disconnected! Falling back to WASD keyboard controls.")
+                print("[MODE] Keyboard mode active.")
             
             # Read controller axes if still connected
             if controller_connected:
@@ -261,6 +264,7 @@ try:
                     controller_connected = True
                     keyboard_active = False
                     print("🎮 Controller reconnected! Switching back to controller input.")
+                    print("[MODE] Controller mode active.")
                 except:
                     pass
             
