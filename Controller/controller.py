@@ -16,6 +16,7 @@ pygame.display.set_caption("Controller Input")
 lx, ly, rx, ry = 0.0, 0.0, 0.0, 0.0
 controller_connected = False
 keyboard_active = False
+debug_mode = False
 
 # Sensitivity and Deadzone Settings
 CONTROL_SETTINGS = {
@@ -166,6 +167,7 @@ def show_help_menu():
     print("   Y-Axis Inversion: I (left), O (right)")
     print("   Exponential Curve: T (left), Y (right)")
     print("   Save Settings: S")
+    print("   Debug Mode: D")
     print("   Reset All Settings: R")
     print("   Show This Help: H")
     
@@ -242,6 +244,17 @@ def load_saved_settings():
         print(f"\n❌ Error loading settings: {e}")
     return False
 
+def toggle_debug_mode():
+    """Toggle debug mode to show raw vs processed values"""
+    global debug_mode
+    debug_mode = not debug_mode
+    status = "ON" if debug_mode else "OFF"
+    print(f"\n🐛 Debug mode: {status}")
+    if debug_mode:
+        print("   Showing raw vs processed stick values")
+    else:
+        print("   Showing processed stick values only")
+
 # Try to initialize controller
 if pygame.joystick.get_count() > 0:
     try:
@@ -264,6 +277,7 @@ if pygame.joystick.get_count() > 0:
         print("   Y-Axis Inversion: I (left stick), O (right stick)")
         print("   Exponential Curve: T (left), Y (right)")
         print("   Save Settings: S")
+        print("   Debug Mode: D")
         print("   Reset All Settings: R")
         print("[MODE] Controller mode active.")
     except:
@@ -347,6 +361,9 @@ try:
                 # Save settings
                 elif event.key == pygame.K_s: save_current_settings()
                 
+                # Debug mode toggle
+                elif event.key == pygame.K_d: toggle_debug_mode()
+                
                 # Reset all settings
                 elif event.key == pygame.K_r: reset_all_settings()
                 
@@ -419,7 +436,10 @@ try:
                     handle_button_press('Y')
         
         # Print the current control values
-        print(f"🕹️  Left Stick: X={lx:.2f}  Y={ly:.2f}    |    Right Stick: X={rx:.2f}  Y={ry:.2f}", end='\r')
+        if debug_mode:
+            print(f"🕹️  Left Stick: Raw(X={raw_lx:.2f} Y={raw_ly:.2f}) → Processed(X={lx:.2f} Y={ly:.2f})    |    Right Stick: Raw(X={raw_rx:.2f} Y={raw_ry:.2f}) → Processed(X={rx:.2f} Y={ry:.2f})", end='\r')
+        else:
+            print(f"🕹️  Left Stick: X={lx:.2f}  Y={ly:.2f}    |    Right Stick: X={rx:.2f}  Y={ry:.2f}", end='\r')
         
         # Small delay to prevent high CPU usage
         time.sleep(0.05)
