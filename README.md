@@ -1,4 +1,4 @@
-# Arduino Rover Communication
+# Arduino Rover Communication : For the Arc Jr Project 2025 : Team FireFlies
 
 This project implements the Arc Jr project's ground station control system, enabling both controller and keyboard-based control of the rover using nRF24L01+ radio module.
 
