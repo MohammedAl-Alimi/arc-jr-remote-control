@@ -21,6 +21,12 @@ struct TelemetryData {
   float humidity;
   int tagId;
   uint32_t timestamp;
+  int batteryVoltage;
+  int batteryCurrent;
+  int batteryTemperature;
+  int batterySOC;
+  int batterySOH;
+  int batterySOC; 
 };
 
 TelemetryData telemetry; 
