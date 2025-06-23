@@ -27,6 +27,9 @@ struct TelemetryData {
   int batterySOC;
   int batterySOH;
   int batterySOC; 
+  int batterySOH;
+  int batterySOC;
+  int batterySOH; 
 };
 
 TelemetryData telemetry; 
