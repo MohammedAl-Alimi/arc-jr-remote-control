@@ -18,6 +18,9 @@ controller_connected = False
 keyboard_active = False
 debug_mode = False
 auto_center = False
+show_fps = False
+frame_count = 0
+last_fps_time = time.time()
 
 # Sensitivity and Deadzone Settings
 CONTROL_SETTINGS = {
@@ -171,6 +174,7 @@ def show_help_menu():
     print("   Debug Mode: D")
     print("   Quick Presets: 1 (slow), 2 (normal), 3 (fast)")
     print("   Auto-Center: C")
+    print("   Show FPS: F")
     print("   Reset All Settings: R")
     print("   Show This Help: H")
     
@@ -290,6 +294,17 @@ def toggle_auto_center():
     else:
         print("   Sticks will maintain position when released")
 
+def toggle_fps_display():
+    """Toggle FPS and performance display"""
+    global show_fps
+    show_fps = not show_fps
+    status = "ON" if show_fps else "OFF"
+    print(f"\n📊 FPS display: {status}")
+    if show_fps:
+        print("   Showing frame rate and performance metrics")
+    else:
+        print("   Hiding performance metrics")
+
 # Try to initialize controller
 if pygame.joystick.get_count() > 0:
     try:
@@ -315,6 +330,7 @@ if pygame.joystick.get_count() > 0:
         print("   Debug Mode: D")
         print("   Quick Presets: 1 (slow), 2 (normal), 3 (fast)")
         print("   Auto-Center: C")
+        print("   Show FPS: F")
         print("   Reset All Settings: R")
         print("[MODE] Controller mode active.")
     except:
@@ -409,6 +425,9 @@ try:
                 # Auto-center toggle
                 elif event.key == pygame.K_c: toggle_auto_center()
                 
+                # FPS display toggle
+                elif event.key == pygame.K_f: toggle_fps_display()
+                
                 # Reset all settings
                 elif event.key == pygame.K_r: reset_all_settings()
                 
@@ -492,6 +511,17 @@ try:
             print(f"🕹️  Left Stick: Raw(X={raw_lx:.2f} Y={raw_ly:.2f}) → Processed(X={lx:.2f} Y={ly:.2f})    |    Right Stick: Raw(X={raw_rx:.2f} Y={raw_ry:.2f}) → Processed(X={rx:.2f} Y={ry:.2f})", end='\r')
         else:
             print(f"🕹️  Left Stick: X={lx:.2f}  Y={ly:.2f}    |    Right Stick: X={rx:.2f}  Y={ry:.2f}", end='\r')
+        
+        # Calculate and display FPS if enabled
+        if show_fps:
+            global frame_count, last_fps_time
+            frame_count += 1
+            current_time = time.time()
+            if current_time - last_fps_time >= 1.0:  # Update every second
+                fps = frame_count / (current_time - last_fps_time)
+                print(f"\n📊 FPS: {fps:.1f} | Frame: {frame_count} | Time: {current_time:.1f}s")
+                frame_count = 0
+                last_fps_time = current_time
         
         # Small delay to prevent high CPU usage
         time.sleep(0.05)
