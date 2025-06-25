@@ -11,7 +11,7 @@ This project implements the Arc Jr project's ground station control system, enab
 
 ## Pin Connections
 
-nRF24L01+ to Arduino Uno:
+nRF24L01+ to Arduino Uno: :: 
 - CE -> Pin 9
 - CSN -> Pin 10
 - MOSI -> Pin 11 (SPI)
@@ -20,7 +20,7 @@ nRF24L01+ to Arduino Uno:
 - VCC -> 3.3V
 - GND -> GND
 
-## Software Requirements
+## Software Requirements : for the arc jr rover 
 
 1. Arduino IDE (2.x or later)
 2. Required Libraries:
@@ -100,6 +100,11 @@ The controller supports real-time adjustment of stick sensitivity and deadzone s
 - **Sensitivity**: Keys F/G/H/J/K/L (0.1 to 0.6)
 - **Deadzone**: Keys Z/X/C/V (0.0 to 0.3)
 
+**Quick Presets:**
+- **1**: Slow mode (0.5 sensitivity, 0.15 deadzone, 1.2 exponential)
+- **2**: Normal mode (1.0 sensitivity, 0.1 deadzone, 1.5 exponential)
+- **3**: Fast mode (1.5 sensitivity, 0.05 deadzone, 1.8 exponential)
+
 **Settings Explained:**
 - **Sensitivity**: Controls how responsive the stick is (0.1 = very slow, 1.0 = normal, 2.0 = very fast)
 - **Deadzone**: Prevents drift by ignoring small movements (0.0 = no deadzone, 0.5 = 50% deadzone)
@@ -151,6 +156,7 @@ The ground station sends these commands to the rover:
 - **Sensitivity Control**: Adjustable stick sensitivity for fine-tuned control
 - **Deadzone Management**: Configurable deadzones to prevent stick drift
 - **Exponential Response**: Customizable response curves for precise control
+- **Quick Presets**: One-touch sensitivity modes (slow, normal, fast)
 
 ### Button Actions
 - **Emergency Stop**: Immediate halt of all rover movement

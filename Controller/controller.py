@@ -168,6 +168,7 @@ def show_help_menu():
     print("   Exponential Curve: T (left), Y (right)")
     print("   Save Settings: S")
     print("   Debug Mode: D")
+    print("   Quick Presets: 1 (slow), 2 (normal), 3 (fast)")
     print("   Reset All Settings: R")
     print("   Show This Help: H")
     
@@ -255,6 +256,27 @@ def toggle_debug_mode():
     else:
         print("   Showing processed stick values only")
 
+def set_sensitivity_preset(preset_name):
+    """Set quick sensitivity presets for both sticks"""
+    presets = {
+        'slow': {'sensitivity': 0.5, 'deadzone': 0.15, 'exponential': 1.2},
+        'normal': {'sensitivity': 1.0, 'deadzone': 0.1, 'exponential': 1.5},
+        'fast': {'sensitivity': 1.5, 'deadzone': 0.05, 'exponential': 1.8}
+    }
+    
+    if preset_name in presets:
+        preset = presets[preset_name]
+        for stick_type in ['left_stick', 'right_stick']:
+            CONTROL_SETTINGS[stick_type]['sensitivity'] = preset['sensitivity']
+            CONTROL_SETTINGS[stick_type]['deadzone'] = preset['deadzone']
+            CONTROL_SETTINGS[stick_type]['exponential'] = preset['exponential']
+        
+        print(f"\n⚡ Sensitivity preset: {preset_name.upper()}")
+        print(f"   Sensitivity: {preset['sensitivity']}")
+        print(f"   Deadzone: {preset['deadzone']}")
+        print(f"   Exponential: {preset['exponential']}")
+        print_control_settings()
+
 # Try to initialize controller
 if pygame.joystick.get_count() > 0:
     try:
@@ -278,6 +300,7 @@ if pygame.joystick.get_count() > 0:
         print("   Exponential Curve: T (left), Y (right)")
         print("   Save Settings: S")
         print("   Debug Mode: D")
+        print("   Quick Presets: 1 (slow), 2 (normal), 3 (fast)")
         print("   Reset All Settings: R")
         print("[MODE] Controller mode active.")
     except:
@@ -363,6 +386,11 @@ try:
                 
                 # Debug mode toggle
                 elif event.key == pygame.K_d: toggle_debug_mode()
+                
+                # Quick sensitivity presets
+                elif event.key == pygame.K_1: set_sensitivity_preset('slow')
+                elif event.key == pygame.K_2: set_sensitivity_preset('normal')
+                elif event.key == pygame.K_3: set_sensitivity_preset('fast')
                 
                 # Reset all settings
                 elif event.key == pygame.K_r: reset_all_settings()
