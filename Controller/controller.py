@@ -17,6 +17,7 @@ lx, ly, rx, ry = 0.0, 0.0, 0.0, 0.0
 controller_connected = False
 keyboard_active = False
 debug_mode = False
+auto_center = False
 
 # Sensitivity and Deadzone Settings
 CONTROL_SETTINGS = {
@@ -169,6 +170,7 @@ def show_help_menu():
     print("   Save Settings: S")
     print("   Debug Mode: D")
     print("   Quick Presets: 1 (slow), 2 (normal), 3 (fast)")
+    print("   Auto-Center: C")
     print("   Reset All Settings: R")
     print("   Show This Help: H")
     
@@ -277,6 +279,17 @@ def set_sensitivity_preset(preset_name):
         print(f"   Exponential: {preset['exponential']}")
         print_control_settings()
 
+def toggle_auto_center():
+    """Toggle auto-center mode for sticks"""
+    global auto_center
+    auto_center = not auto_center
+    status = "ON" if auto_center else "OFF"
+    print(f"\n🎯 Auto-center mode: {status}")
+    if auto_center:
+        print("   Sticks will automatically center when released")
+    else:
+        print("   Sticks will maintain position when released")
+
 # Try to initialize controller
 if pygame.joystick.get_count() > 0:
     try:
@@ -301,6 +314,7 @@ if pygame.joystick.get_count() > 0:
         print("   Save Settings: S")
         print("   Debug Mode: D")
         print("   Quick Presets: 1 (slow), 2 (normal), 3 (fast)")
+        print("   Auto-Center: C")
         print("   Reset All Settings: R")
         print("[MODE] Controller mode active.")
     except:
@@ -392,6 +406,9 @@ try:
                 elif event.key == pygame.K_2: set_sensitivity_preset('normal')
                 elif event.key == pygame.K_3: set_sensitivity_preset('fast')
                 
+                # Auto-center toggle
+                elif event.key == pygame.K_c: toggle_auto_center()
+                
                 # Reset all settings
                 elif event.key == pygame.K_r: reset_all_settings()
                 
@@ -422,6 +439,13 @@ try:
                 ly = process_stick_input(raw_ly, 'left_stick')
                 rx = process_stick_input(raw_rx, 'right_stick')
                 ry = process_stick_input(raw_ry, 'right_stick')
+                
+                # Apply auto-center if enabled
+                if auto_center:
+                    if abs(raw_lx) < 0.05: lx = 0.0
+                    if abs(raw_ly) < 0.05: ly = 0.0
+                    if abs(raw_rx) < 0.05: rx = 0.0
+                    if abs(raw_ry) < 0.05: ry = 0.0
         
         if keyboard_active:
             # Check if controller got reconnected
