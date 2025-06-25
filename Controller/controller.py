@@ -19,6 +19,7 @@ keyboard_active = False
 debug_mode = False
 auto_center = False
 show_fps = False
+vibration_enabled = False
 frame_count = 0
 last_fps_time = time.time()
 
@@ -175,6 +176,7 @@ def show_help_menu():
     print("   Quick Presets: 1 (slow), 2 (normal), 3 (fast)")
     print("   Auto-Center: C")
     print("   Show FPS: F")
+    print("   Vibration: V")
     print("   Reset All Settings: R")
     print("   Show This Help: H")
     
@@ -207,6 +209,14 @@ def handle_button_press(button_name):
         if not button_states[action]:  # Only trigger once per press
             button_states[action] = True
             print(f"\n🔘 Button {button_name} pressed: {action}")
+            
+            # Trigger vibration if enabled
+            if vibration_enabled and controller_connected:
+                try:
+                    joystick.rumble(0.5, 0.5, 100)  # Left motor, right motor, duration
+                except:
+                    pass  # Vibration not supported on this controller
+            
             return action
     return None
 
@@ -305,6 +315,17 @@ def toggle_fps_display():
     else:
         print("   Hiding performance metrics")
 
+def toggle_vibration():
+    """Toggle controller vibration feedback"""
+    global vibration_enabled
+    vibration_enabled = not vibration_enabled
+    status = "ON" if vibration_enabled else "OFF"
+    print(f"\n📳 Vibration feedback: {status}")
+    if vibration_enabled:
+        print("   Controller will vibrate on button presses")
+    else:
+        print("   Vibration disabled")
+
 # Try to initialize controller
 if pygame.joystick.get_count() > 0:
     try:
@@ -331,6 +352,7 @@ if pygame.joystick.get_count() > 0:
         print("   Quick Presets: 1 (slow), 2 (normal), 3 (fast)")
         print("   Auto-Center: C")
         print("   Show FPS: F")
+        print("   Vibration: V")
         print("   Reset All Settings: R")
         print("[MODE] Controller mode active.")
     except:
@@ -427,6 +449,9 @@ try:
                 
                 # FPS display toggle
                 elif event.key == pygame.K_f: toggle_fps_display()
+                
+                # Vibration toggle
+                elif event.key == pygame.K_v: toggle_vibration()
                 
                 # Reset all settings
                 elif event.key == pygame.K_r: reset_all_settings()
