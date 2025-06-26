@@ -384,6 +384,11 @@ def toggle_title():
     window_title = "Arc Jr Controller" if window_title == "Controller Input" else "Controller Input"
     print(f"\n📝 Title: {window_title}")
 
+def toggle_volume():
+    global volume_level
+    volume_level = 100 if volume_level == 50 else 50
+    print(f"\n🔊 Volume: {volume_level}%")
+
 # Try to initialize controller
 if pygame.joystick.get_count() > 0:
     try:
