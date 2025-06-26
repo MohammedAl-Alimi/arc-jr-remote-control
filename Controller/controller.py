@@ -26,6 +26,7 @@ fullscreen = False
 border_enabled = True
 cursor_visible = True
 background_color = "black"
+window_title = "Controller Input"
 frame_count = 0
 last_fps_time = time.time()
 
