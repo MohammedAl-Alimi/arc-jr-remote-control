@@ -24,6 +24,7 @@ color_theme = "default"
 sound_enabled = False
 fullscreen = False
 border_enabled = True
+cursor_visible = True
 frame_count = 0
 last_fps_time = time.time()
 
@@ -365,6 +366,11 @@ def toggle_border():
     border_enabled = not border_enabled
     print(f"\n🖼️ Border: {'ON' if border_enabled else 'OFF'}")
 
+def toggle_cursor():
+    global cursor_visible
+    cursor_visible = not cursor_visible
+    print(f"\n👆 Cursor: {'ON' if cursor_visible else 'OFF'}")
+
 # Try to initialize controller
 if pygame.joystick.get_count() > 0:
     try:
@@ -504,6 +510,9 @@ try:
                 
                 # Border toggle
                 elif event.key == pygame.K_b: toggle_border()
+                
+                # Cursor toggle
+                elif event.key == pygame.K_x: toggle_cursor()
                 
                 # Reset all settings
                 elif event.key == pygame.K_r: reset_all_settings()
