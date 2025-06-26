@@ -378,6 +378,11 @@ def toggle_background():
     background_color = "white" if background_color == "black" else "black"
     print(f"\n🎨 Background: {background_color}")
 
+def toggle_title():
+    global window_title
+    window_title = "Arc Jr Controller" if window_title == "Controller Input" else "Controller Input"
+    print(f"\n📝 Title: {window_title}")
+
 # Try to initialize controller
 if pygame.joystick.get_count() > 0:
     try:
