@@ -20,6 +20,7 @@ debug_mode = False
 auto_center = False
 show_fps = False
 vibration_enabled = False
+color_theme = "default"
 frame_count = 0
 last_fps_time = time.time()
 
@@ -177,6 +178,7 @@ def show_help_menu():
     print("   Auto-Center: C")
     print("   Show FPS: F")
     print("   Vibration: V")
+    print("   Color Theme: T")
     print("   Reset All Settings: R")
     print("   Show This Help: H")
     
@@ -326,6 +328,25 @@ def toggle_vibration():
     else:
         print("   Vibration disabled")
 
+def cycle_color_theme():
+    """Cycle through different color themes"""
+    global color_theme
+    themes = {
+        "default": "🎮",
+        "space": "🚀", 
+        "nature": "🌿",
+        "tech": "⚡",
+        "gaming": "🎯"
+    }
+    
+    theme_list = list(themes.keys())
+    current_index = theme_list.index(color_theme)
+    next_index = (current_index + 1) % len(theme_list)
+    color_theme = theme_list[next_index]
+    
+    print(f"\n🎨 Color theme: {color_theme.title()} {themes[color_theme]}")
+    print(f"   Console output will use {color_theme} theme")
+
 # Try to initialize controller
 if pygame.joystick.get_count() > 0:
     try:
@@ -353,6 +374,7 @@ if pygame.joystick.get_count() > 0:
         print("   Auto-Center: C")
         print("   Show FPS: F")
         print("   Vibration: V")
+        print("   Color Theme: T")
         print("   Reset All Settings: R")
         print("[MODE] Controller mode active.")
     except:
@@ -452,6 +474,9 @@ try:
                 
                 # Vibration toggle
                 elif event.key == pygame.K_v: toggle_vibration()
+                
+                # Color theme cycling
+                elif event.key == pygame.K_t: cycle_color_theme()
                 
                 # Reset all settings
                 elif event.key == pygame.K_r: reset_all_settings()
