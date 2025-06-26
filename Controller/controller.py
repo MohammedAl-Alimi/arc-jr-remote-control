@@ -21,6 +21,8 @@ auto_center = False
 show_fps = False
 vibration_enabled = False
 color_theme = "default"
+sound_enabled = False
+fullscreen = False
 frame_count = 0
 last_fps_time = time.time()
 
@@ -347,6 +349,16 @@ def cycle_color_theme():
     print(f"\n🎨 Color theme: {color_theme.title()} {themes[color_theme]}")
     print(f"   Console output will use {color_theme} theme")
 
+def toggle_sound():
+    global sound_enabled
+    sound_enabled = not sound_enabled
+    print(f"\n🔊 Sound effects: {'ON' if sound_enabled else 'OFF'}")
+
+def toggle_fullscreen():
+    global fullscreen
+    fullscreen = not fullscreen
+    print(f"\n🖥️ Fullscreen: {'ON' if fullscreen else 'OFF'}")
+
 # Try to initialize controller
 if pygame.joystick.get_count() > 0:
     try:
@@ -477,6 +489,12 @@ try:
                 
                 # Color theme cycling
                 elif event.key == pygame.K_t: cycle_color_theme()
+                
+                # Sound toggle
+                elif event.key == pygame.K_s: toggle_sound()
+                
+                # Fullscreen toggle
+                elif event.key == pygame.K_g: toggle_fullscreen()
                 
                 # Reset all settings
                 elif event.key == pygame.K_r: reset_all_settings()
