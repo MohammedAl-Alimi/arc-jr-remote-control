@@ -618,7 +618,6 @@ try:
         
         # Calculate and display FPS if enabled
         if show_fps:
-            global frame_count, last_fps_time
             frame_count += 1
             current_time = time.time()
             if current_time - last_fps_time >= 1.0:  # Update every second
