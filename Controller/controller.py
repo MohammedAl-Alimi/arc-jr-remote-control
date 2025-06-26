@@ -25,6 +25,7 @@ sound_enabled = False
 fullscreen = False
 border_enabled = True
 cursor_visible = True
+background_color = "black"
 frame_count = 0
 last_fps_time = time.time()
 
