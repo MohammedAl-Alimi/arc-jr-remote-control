@@ -372,6 +372,11 @@ def toggle_cursor():
     cursor_visible = not cursor_visible
     print(f"\n👆 Cursor: {'ON' if cursor_visible else 'OFF'}")
 
+def toggle_background():
+    global background_color
+    background_color = "white" if background_color == "black" else "black"
+    print(f"\n🎨 Background: {background_color}")
+
 # Try to initialize controller
 if pygame.joystick.get_count() > 0:
     try:
