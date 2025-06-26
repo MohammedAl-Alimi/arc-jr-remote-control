@@ -23,6 +23,7 @@ vibration_enabled = False
 color_theme = "default"
 sound_enabled = False
 fullscreen = False
+border_enabled = True
 frame_count = 0
 last_fps_time = time.time()
 
@@ -359,6 +360,11 @@ def toggle_fullscreen():
     fullscreen = not fullscreen
     print(f"\n🖥️ Fullscreen: {'ON' if fullscreen else 'OFF'}")
 
+def toggle_border():
+    global border_enabled
+    border_enabled = not border_enabled
+    print(f"\n🖼️ Border: {'ON' if border_enabled else 'OFF'}")
+
 # Try to initialize controller
 if pygame.joystick.get_count() > 0:
     try:
@@ -495,6 +501,9 @@ try:
                 
                 # Fullscreen toggle
                 elif event.key == pygame.K_g: toggle_fullscreen()
+                
+                # Border toggle
+                elif event.key == pygame.K_b: toggle_border()
                 
                 # Reset all settings
                 elif event.key == pygame.K_r: reset_all_settings()
