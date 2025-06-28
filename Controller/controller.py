@@ -396,6 +396,11 @@ def toggle_brightness():
     brightness = 50 if brightness == 100 else 100
     print(f"\n💡 Brightness: {brightness}%")
 
+def toggle_contrast():
+    global contrast
+    contrast = 50 if contrast == 100 else 100
+    print(f"\n🎨 Contrast: {contrast}%")
+
 # Try to initialize controller
 if pygame.joystick.get_count() > 0:
     try:
