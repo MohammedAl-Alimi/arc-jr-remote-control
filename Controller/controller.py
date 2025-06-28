@@ -31,6 +31,7 @@ volume_level = 50
 brightness = 100
 contrast = 100
 saturation = 100
+hue = 0
 frame_count = 0
 last_fps_time = time.time()
 
