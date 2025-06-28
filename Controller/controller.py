@@ -414,6 +414,11 @@ def toggle_hue():
     hue = 180 if hue == 0 else 0
     print(f"\n🎨 Hue: {hue}°")
 
+def toggle_gamma():
+    global gamma
+    gamma = 2.0 if gamma == 1.0 else 1.0
+    print(f"\n📊 Gamma: {gamma}")
+
 # Try to initialize controller
 if pygame.joystick.get_count() > 0:
     try:
