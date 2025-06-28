@@ -33,6 +33,7 @@ contrast = 100
 saturation = 100
 hue = 0
 gamma = 1.0
+sharpness = 100
 frame_count = 0
 last_fps_time = time.time()
 
