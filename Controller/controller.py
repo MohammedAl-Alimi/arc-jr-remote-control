@@ -34,6 +34,14 @@ saturation = 100
 hue = 0
 gamma = 1.0
 sharpness = 100
+
+# Command recording and playback
+recording = False
+playing = False
+recorded_commands = []
+recording_start_time = 0
+playback_index = 0
+playback_speed = 1.0
 frame_count = 0
 last_fps_time = time.time()
 
@@ -194,6 +202,10 @@ def show_help_menu():
     print("   Color Theme: T")
     print("   Reset All Settings: R")
     print("   Show This Help: H")
+    print("\n🎙️ Recording Controls:")
+    print("   F1: Start Recording | F2: Stop Recording")
+    print("   F3: Start Playback | F4: Stop Playback")
+    print("   F5: Clear Recording | F6/F7/F8: Speed (0.5x/1x/2x)")
     
     print("\n⌨️ KEYBOARD CONTROLS (when no controller):")
     print("   Movement: W/S/A/D")
@@ -418,7 +430,76 @@ def toggle_hue():
 def toggle_gamma():
     global gamma
     gamma = 2.0 if gamma == 1.0 else 1.0
-    print(f"\n📊 Gamma: {gamma}")
+    print(f"\n Gamma: {gamma}")
+
+def start_recording():
+    """Start recording control commands"""
+    global recording, recorded_commands, recording_start_time
+    recording = True
+    recorded_commands = []
+    recording_start_time = time.time()
+    print(f"\n🎙️ Recording started at {time.strftime('%H:%M:%S')}")
+    print("   All stick movements and button presses will be recorded")
+
+def stop_recording():
+    """Stop recording and save commands"""
+    global recording
+    if recording:
+        recording = False
+        duration = time.time() - recording_start_time
+        print(f"\n⏹️ Recording stopped - {len(recorded_commands)} commands captured")
+        print(f"   Duration: {duration:.1f} seconds")
+        return True
+    return False
+
+def start_playback():
+    """Start playing back recorded commands"""
+    global playing, playback_index
+    if recorded_commands and not playing:
+        playing = True
+        playback_index = 0
+        print(f"\n▶️ Playback started - {len(recorded_commands)} commands")
+        print(f"   Speed: {playback_speed}x")
+
+def stop_playback():
+    """Stop command playback"""
+    global playing
+    if playing:
+        playing = False
+        print(f"\n⏹️ Playback stopped at command {playback_index}")
+
+def clear_recording():
+    """Clear all recorded commands"""
+    global recorded_commands
+    recorded_commands = []
+    print(f"\n🗑️ Recording cleared")
+
+def set_playback_speed(speed):
+    """Set playback speed multiplier"""
+    global playback_speed
+    playback_speed = speed
+    print(f"\n⚡ Playback speed: {playback_speed}x")
+
+def record_command(command_type, values, timestamp):
+    """Record a single command with timestamp"""
+    if recording:
+        recorded_commands.append({
+            'type': command_type,
+            'values': values.copy(),
+            'timestamp': timestamp - recording_start_time
+        })
+
+def get_next_playback_command():
+    """Get the next command for playback"""
+    global playback_index
+    if playing and playback_index < len(recorded_commands):
+        command = recorded_commands[playback_index]
+        playback_index += 1
+        return command
+    elif playing and playback_index >= len(recorded_commands):
+        stop_playback()
+        print(f"\n✅ Playback completed")
+    return None
 
 # Try to initialize controller
 if pygame.joystick.get_count() > 0:
@@ -563,6 +644,16 @@ try:
                 # Cursor toggle
                 elif event.key == pygame.K_x: toggle_cursor()
                 
+                # Recording and playback controls
+                elif event.key == pygame.K_F1: start_recording()
+                elif event.key == pygame.K_F2: stop_recording()
+                elif event.key == pygame.K_F3: start_playback()
+                elif event.key == pygame.K_F4: stop_playback()
+                elif event.key == pygame.K_F5: clear_recording()
+                elif event.key == pygame.K_F6: set_playback_speed(0.5)
+                elif event.key == pygame.K_F7: set_playback_speed(1.0)
+                elif event.key == pygame.K_F8: set_playback_speed(2.0)
+                
                 # Reset all settings
                 elif event.key == pygame.K_r: reset_all_settings()
                 
@@ -646,6 +737,21 @@ try:
             print(f"🕹️  Left Stick: Raw(X={raw_lx:.2f} Y={raw_ly:.2f}) → Processed(X={lx:.2f} Y={ly:.2f})    |    Right Stick: Raw(X={raw_rx:.2f} Y={raw_ry:.2f}) → Processed(X={rx:.2f} Y={ry:.2f})", end='\r')
         else:
             print(f"🕹️  Left Stick: X={lx:.2f}  Y={ly:.2f}    |    Right Stick: X={rx:.2f}  Y={ry:.2f}", end='\r')
+        
+        # Record commands if recording is active
+        if recording:
+            current_time = time.time()
+            record_command('stick', {'lx': lx, 'ly': ly, 'rx': rx, 'ry': ry}, current_time)
+        
+        # Playback recorded commands
+        if playing:
+            playback_command = get_next_playback_command()
+            if playback_command and playback_command['type'] == 'stick':
+                lx = playback_command['values']['lx']
+                ly = playback_command['values']['ly']
+                rx = playback_command['values']['rx']
+                ry = playback_command['values']['ry']
+                time.sleep(0.05 / playback_speed)  # Adjust timing for playback speed
         
         # Calculate and display FPS if enabled
         if show_fps:
