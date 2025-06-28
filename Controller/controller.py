@@ -390,6 +390,11 @@ def toggle_volume():
     volume_level = 100 if volume_level == 50 else 50
     print(f"\n🔊 Volume: {volume_level}%")
 
+def toggle_brightness():
+    global brightness
+    brightness = 50 if brightness == 100 else 100
+    print(f"\n💡 Brightness: {brightness}%")
+
 # Try to initialize controller
 if pygame.joystick.get_count() > 0:
     try:
