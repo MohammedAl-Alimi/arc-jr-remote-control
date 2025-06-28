@@ -402,6 +402,11 @@ def toggle_contrast():
     contrast = 50 if contrast == 100 else 100
     print(f"\n🎨 Contrast: {contrast}%")
 
+def toggle_saturation():
+    global saturation
+    saturation = 50 if saturation == 100 else 100
+    print(f"\n🌈 Saturation: {saturation}%")
+
 # Try to initialize controller
 if pygame.joystick.get_count() > 0:
     try:
