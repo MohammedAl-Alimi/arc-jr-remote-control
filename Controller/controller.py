@@ -408,6 +408,11 @@ def toggle_saturation():
     saturation = 50 if saturation == 100 else 100
     print(f"\n🌈 Saturation: {saturation}%")
 
+def toggle_hue():
+    global hue
+    hue = 180 if hue == 0 else 0
+    print(f"\n🎨 Hue: {hue}°")
+
 # Try to initialize controller
 if pygame.joystick.get_count() > 0:
     try:
