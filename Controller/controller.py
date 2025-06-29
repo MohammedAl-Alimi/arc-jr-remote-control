@@ -863,7 +863,8 @@ try:
             deadzone_info = f"DZ:{CONTROL_SETTINGS['left_stick']['deadzone']:.1f}"
             exp_info = f"EXP:{CONTROL_SETTINGS['left_stick']['exponential']:.1f}"
             auto_center_status = "AC" if auto_center else ""
-            print(f"{recording_status}{playback_status}{mode_indicator}{battery_indicator} {sensitivity_info} {deadzone_info} {exp_info} {auto_center_status} 🕹️  Left Stick: X={lx:.2f}  Y={ly:.2f}    |    Right Stick: X={rx:.2f}  Y={ry:.2f}", end='\r')
+            debug_status = "DBG" if debug_mode else ""
+            print(f"{recording_status}{playback_status}{mode_indicator}{battery_indicator} {sensitivity_info} {deadzone_info} {exp_info} {auto_center_status} {debug_status} 🕹️  Left Stick: X={lx:.2f}  Y={ly:.2f}    |    Right Stick: X={rx:.2f}  Y={ry:.2f}", end='\r')
         
         # Record commands if recording is active
         if recording:
