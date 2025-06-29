@@ -865,7 +865,8 @@ try:
             auto_center_status = "AC" if auto_center else ""
             debug_status = "DBG" if debug_mode else ""
             vibration_status = "VB" if vibration_enabled else ""
-            print(f"{recording_status}{playback_status}{mode_indicator}{battery_indicator} {sensitivity_info} {deadzone_info} {exp_info} {auto_center_status} {debug_status} {vibration_status} 🕹️  Left Stick: X={lx:.2f}  Y={ly:.2f}    |    Right Stick: X={rx:.2f}  Y={ry:.2f}", end='\r')
+            theme_status = f"TH:{color_theme[:3].upper()}"
+            print(f"{recording_status}{playback_status}{mode_indicator}{battery_indicator} {sensitivity_info} {deadzone_info} {exp_info} {auto_center_status} {debug_status} {vibration_status} {theme_status} 🕹️  Left Stick: X={lx:.2f}  Y={ly:.2f}    |    Right Stick: X={rx:.2f}  Y={ry:.2f}", end='\r')
         
         # Record commands if recording is active
         if recording:
