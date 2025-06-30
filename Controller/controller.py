@@ -851,7 +851,8 @@ try:
             recording_status = "🔴" if recording else "⚪"
             playback_status = "▶️" if playing else ""
             mode_indicator = "🎮" if controller_connected else "⌨️"
-            print(f"{recording_status}{playback_status}{mode_indicator} 🕹️  Left Stick: X={lx:.2f}  Y={ly:.2f}    |    Right Stick: X={rx:.2f}  Y={ry:.2f}", end='\r')
+            battery_indicator = f"🔋{controller_battery_level:.0f}%" if controller_connected else ""
+            print(f"{recording_status}{playback_status}{mode_indicator}{battery_indicator} 🕹️  Left Stick: X={lx:.2f}  Y={ly:.2f}    |    Right Stick: X={rx:.2f}  Y={ry:.2f}", end='\r')
         
         # Record commands if recording is active
         if recording:
