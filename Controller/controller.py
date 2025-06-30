@@ -846,6 +846,13 @@ try:
         # Print the current control values
         if debug_mode:
             timestamp = time.strftime("%H:%M:%S")
+            # Initialize raw values for keyboard mode
+            raw_lx = raw_ly = raw_rx = raw_ry = 0.0
+            if controller_connected:
+                raw_lx = joystick.get_axis(0)
+                raw_ly = joystick.get_axis(1)
+                raw_rx = joystick.get_axis(2)
+                raw_ry = joystick.get_axis(3)
             print(f"[{timestamp}] Frame:{frame_count} 🕹️  Left Stick: Raw(X={raw_lx:.2f} Y={raw_ly:.2f}) → Processed(X={lx:.2f} Y={ly:.2f})    |    Right Stick: Raw(X={raw_rx:.2f} Y={raw_ry:.2f}) → Processed(X={rx:.2f} Y={ry:.2f})", end='\r')
         else:
             recording_status = "🔴" if recording else "⚪"
