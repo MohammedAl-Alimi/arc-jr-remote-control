@@ -208,6 +208,7 @@ def reset_all_settings():
     print("\n🔄 All settings reset to default values")
     print_control_settings()
 
+# Show help menu for controls (July 1st micro-commit)
 def show_help_menu():
     """Display all controls and mappings"""
     current_time = time.strftime("%H:%M:%S")
