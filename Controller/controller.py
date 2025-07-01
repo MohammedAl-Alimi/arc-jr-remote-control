@@ -457,6 +457,11 @@ def toggle_vignette():
     vignette = 20 if vignette == 0 else 0
     print(f"\n🖼️ Vignette: {vignette}")
 
+def toggle_chromatic():
+    global chromatic
+    chromatic = 5 if chromatic == 0 else 0
+    print(f"\n🌈 Chromatic: {chromatic}")
+
 def start_recording():
     """Start recording control commands"""
     global recording, recorded_commands, recording_start_time
