@@ -47,8 +47,19 @@ noise = 0
 grain = 0
 vignette = 0
 chromatic = 0
+distortion = 0
+fisheye = 0
 frame_count = 0
 last_fps_time = time.time()
+
+# Command history for display
+command_history = []
+max_history_size = 10
+
+# Controller battery tracking
+controller_battery_level = 100.0  # Simulated battery level (0-100%)
+battery_drain_rate = 0.01  # Battery drain per frame
+last_battery_update = time.time()
 
 # Sensitivity and Deadzone Settings
 CONTROL_SETTINGS = {
@@ -462,6 +473,11 @@ def toggle_chromatic():
     chromatic = 5 if chromatic == 0 else 0
     print(f"\n🌈 Chromatic: {chromatic}")
 
+def toggle_distortion():
+    global distortion
+    distortion = 10 if distortion == 0 else 0
+    print(f"\n🌀 Distortion: {distortion}")
+
 def start_recording():
     """Start recording control commands"""
     global recording, recorded_commands, recording_start_time
@@ -530,6 +546,61 @@ def get_next_playback_command():
         stop_playback()
         print(f"\n✅ Playback completed")
     return None
+
+def add_to_command_history(command_type, values=None):
+    """Add a command to the history for display"""
+    global command_history
+    timestamp = time.strftime("%H:%M:%S")
+    if values:
+        command_str = f"{timestamp} - {command_type}: {values}"
+    else:
+        command_str = f"{timestamp} - {command_type}"
+    
+    command_history.append(command_str)
+    if len(command_history) > max_history_size:
+        command_history.pop(0)
+
+def display_command_history():
+    """Display the command history"""
+    if command_history:
+        print("\n📜 Command History:")
+        for i, cmd in enumerate(command_history[-5:], 1):  # Show last 5
+            print(f"   {i}. {cmd}")
+    else:
+        print("\n📜 No commands in history")
+
+def update_battery_level():
+    """Update controller battery level (simulated)"""
+    global controller_battery_level, last_battery_update
+    current_time = time.time()
+    if current_time - last_battery_update >= 1.0:  # Update every second
+        controller_battery_level = max(0.0, controller_battery_level - battery_drain_rate)
+        last_battery_update = current_time
+
+def display_battery_level():
+    """Display current battery level"""
+    battery_icon = "🔋" if controller_battery_level > 20 else "🔴"
+    print(f"\n{battery_icon} Controller Battery: {controller_battery_level:.1f}%")
+    
+    if controller_battery_level < 10:
+        print("⚠️  Low battery warning! Consider charging controller.")
+    elif controller_battery_level < 25:
+        print("🔶 Battery level is getting low.")
+
+def display_connection_status():
+    """Display current controller connection status"""
+    if controller_connected:
+        try:
+            controller_name = joystick.get_name()
+        except:
+            controller_name = "Unknown Controller"
+        print(f"\n✅ Controller Connected: {controller_name}")
+        print(f"📡 Input Mode: Controller")
+        print(f"🎮 Battery: {controller_battery_level:.1f}%")
+    else:
+        print(f"\n❌ Controller Disconnected")
+        print(f"⌨️  Input Mode: Keyboard")
+        print(f"🔧 Using WASD controls")
 
 # Try to initialize controller
 if pygame.joystick.get_count() > 0:
@@ -689,6 +760,15 @@ try:
                 
                 # Show help menu
                 elif event.key == pygame.K_h: show_help_menu()
+                
+                # Show command history
+                elif event.key == pygame.K_p: display_command_history()
+                
+                # Show battery level
+                elif event.key == pygame.K_m: display_battery_level()
+                
+                # Show connection status
+                elif event.key == pygame.K_n: display_connection_status()
         
         # Reset values each frame
         lx, ly, rx, ry = 0.0, 0.0, 0.0, 0.0
@@ -764,7 +844,8 @@ try:
         
         # Print the current control values
         if debug_mode:
-            print(f"🕹️  Left Stick: Raw(X={raw_lx:.2f} Y={raw_ly:.2f}) → Processed(X={lx:.2f} Y={ly:.2f})    |    Right Stick: Raw(X={raw_rx:.2f} Y={raw_ry:.2f}) → Processed(X={rx:.2f} Y={ry:.2f})", end='\r')
+            timestamp = time.strftime("%H:%M:%S")
+            print(f"[{timestamp}] 🕹️  Left Stick: Raw(X={raw_lx:.2f} Y={raw_ly:.2f}) → Processed(X={lx:.2f} Y={ly:.2f})    |    Right Stick: Raw(X={raw_rx:.2f} Y={raw_ry:.2f}) → Processed(X={rx:.2f} Y={ry:.2f})", end='\r')
         else:
             print(f"🕹️  Left Stick: X={lx:.2f}  Y={ly:.2f}    |    Right Stick: X={rx:.2f}  Y={ry:.2f}", end='\r')
         
@@ -792,6 +873,9 @@ try:
                 print(f"\n📊 FPS: {fps:.1f} | Frame: {frame_count} | Time: {current_time:.1f}s")
                 frame_count = 0
                 last_fps_time = current_time
+        
+        # Update battery level
+        update_battery_level()
         
         # Small delay to prevent high CPU usage
         time.sleep(0.05)
