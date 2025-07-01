@@ -849,7 +849,8 @@ try:
             print(f"[{timestamp}] Frame:{frame_count} 🕹️  Left Stick: Raw(X={raw_lx:.2f} Y={raw_ly:.2f}) → Processed(X={lx:.2f} Y={ly:.2f})    |    Right Stick: Raw(X={raw_rx:.2f} Y={raw_ry:.2f}) → Processed(X={rx:.2f} Y={ry:.2f})", end='\r')
         else:
             recording_status = "🔴" if recording else "⚪"
-            print(f"{recording_status} 🕹️  Left Stick: X={lx:.2f}  Y={ly:.2f}    |    Right Stick: X={rx:.2f}  Y={ry:.2f}", end='\r')
+            playback_status = "▶️" if playing else ""
+            print(f"{recording_status}{playback_status} 🕹️  Left Stick: X={lx:.2f}  Y={ly:.2f}    |    Right Stick: X={rx:.2f}  Y={ry:.2f}", end='\r')
         
         # Record commands if recording is active
         if recording:
