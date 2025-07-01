@@ -195,8 +195,9 @@ def reset_all_settings():
 
 def show_help_menu():
     """Display all controls and mappings"""
+    current_time = time.strftime("%H:%M:%S")
     print("\n" + "="*50)
-    print("🎮 CONTROLLER HELP MENU")
+    print(f"🎮 CONTROLLER HELP MENU - {current_time}")
     print("="*50)
     print("\n📋 CONTROLLER BUTTONS:")
     for button, action in button_actions.items():
