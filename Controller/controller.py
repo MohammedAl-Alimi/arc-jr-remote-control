@@ -45,6 +45,7 @@ playback_speed = 1.0
 blur = 0
 noise = 0
 grain = 0
+vignette = 0
 frame_count = 0
 last_fps_time = time.time()
 
