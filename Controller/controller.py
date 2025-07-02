@@ -190,6 +190,7 @@ def toggle_y_inversion(stick_type):
     status = "ON" if CONTROL_SETTINGS[stick_type]['invert_y'] else "OFF"
     print(f"\n🔄 {stick_type.replace('_', ' ').title()} Y-axis inversion: {status}")
 
+# Reset all control settings (July 2nd micro-commit)
 def reset_all_settings():
     """Reset all sensitivity and deadzone settings to default values"""
     CONTROL_SETTINGS['left_stick'] = {
