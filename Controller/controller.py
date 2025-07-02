@@ -445,6 +445,11 @@ def toggle_noise():
     noise = 10 if noise == 0 else 0
     print(f"\n📻 Noise: {noise}")
 
+def toggle_grain():
+    global grain
+    grain = 15 if grain == 0 else 0
+    print(f"\n🌾 Grain: {grain}")
+
 def start_recording():
     """Start recording control commands"""
     global recording, recorded_commands, recording_start_time
