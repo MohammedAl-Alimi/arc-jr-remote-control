@@ -451,6 +451,11 @@ def toggle_grain():
     grain = 15 if grain == 0 else 0
     print(f"\n🌾 Grain: {grain}")
 
+def toggle_vignette():
+    global vignette
+    vignette = 20 if vignette == 0 else 0
+    print(f"\n🖼️ Vignette: {vignette}")
+
 def start_recording():
     """Start recording control commands"""
     global recording, recorded_commands, recording_start_time
