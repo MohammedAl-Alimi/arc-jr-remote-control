@@ -46,6 +46,7 @@ blur = 0
 noise = 0
 grain = 0
 vignette = 0
+chromatic = 0
 frame_count = 0
 last_fps_time = time.time()
 
