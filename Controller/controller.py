@@ -183,6 +183,7 @@ def adjust_exponential(stick_type, new_exponential):
         CONTROL_SETTINGS[stick_type]['exponential'] = new_exponential
         print(f"\n⚙️ {stick_type.replace('_', ' ').title()} exponential set to: {new_exponential}")
 
+# Toggle Y-axis inversion (July 3rd micro-commit)
 def toggle_y_inversion(stick_type):
     """Toggle Y-axis inversion for a specific stick"""
     CONTROL_SETTINGS[stick_type]['invert_y'] = not CONTROL_SETTINGS[stick_type]['invert_y']
