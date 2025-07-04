@@ -176,6 +176,7 @@ def adjust_deadzone(stick_type, new_deadzone):
         CONTROL_SETTINGS[stick_type]['deadzone'] = new_deadzone
         print(f"\n⚙️ {stick_type.replace('_', ' ').title()} deadzone set to: {new_deadzone}")
 
+# Adjust stick exponential curve (July 4th micro-commit)
 def adjust_exponential(stick_type, new_exponential):
     """Adjust exponential curve for a specific stick"""
     if 1.0 <= new_exponential <= 3.0:
