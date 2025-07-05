@@ -169,6 +169,7 @@ def adjust_sensitivity(stick_type, new_sensitivity):
         CONTROL_SETTINGS[stick_type]['sensitivity'] = new_sensitivity
         print(f"\n⚙️ {stick_type.replace('_', ' ').title()} sensitivity set to: {new_sensitivity}")
 
+# Adjust stick deadzone (July 5th micro-commit)
 def adjust_deadzone(stick_type, new_deadzone):
     """Adjust deadzone for a specific stick"""
     if 0.0 <= new_deadzone <= 0.5:
