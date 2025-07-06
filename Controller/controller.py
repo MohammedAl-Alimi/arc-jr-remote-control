@@ -162,6 +162,7 @@ def process_stick_input(raw_value, stick_type):
     # Clamp to valid range
     return max(-1.0, min(1.0, processed))
 
+# Adjust stick sensitivity (July 6th micro-commit)
 def adjust_sensitivity(stick_type, new_sensitivity):
     """Adjust sensitivity for a specific stick"""
     if 0.1 <= new_sensitivity <= 2.0:
