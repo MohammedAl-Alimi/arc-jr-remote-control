@@ -138,6 +138,7 @@ def apply_sensitivity(value, sensitivity, exponential):
     curved = abs_value ** exponential
     return sign * curved * sensitivity
 
+# Process stick input for control (July 7th micro-commit)
 def process_stick_input(raw_value, stick_type):
     """Process raw stick input with deadzone, sensitivity, and exponential curve"""
     settings = CONTROL_SETTINGS[stick_type]
