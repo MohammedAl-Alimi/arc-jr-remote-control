@@ -129,6 +129,7 @@ def apply_deadzone(value, deadzone):
     normalized = (abs(value) - deadzone) / (1.0 - deadzone)
     return sign * normalized
 
+# Sensitivity adjustment logic (July 8th micro-commit)
 def apply_sensitivity(value, sensitivity, exponential):
     """Apply sensitivity and exponential curve to a stick value"""
     # Apply exponential curve for more precise control
