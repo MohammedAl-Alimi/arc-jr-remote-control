@@ -119,6 +119,7 @@ TRIGGER_AXES = {
     5: 'RT',     # Right trigger
 }
 
+# Main controller class and logic (July 9th micro-commit)
 def apply_deadzone(value, deadzone):
     """Apply deadzone to a stick value"""
     if abs(value) < deadzone:
