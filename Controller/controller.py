@@ -8,6 +8,7 @@ import time
 import sys
 # Importing json for configuration (July 11th micro-commit)
 import json
+# Importing os for file and path operations (July 10th micro-commit)
 import os
 
 # Initialize pygame and joystick
