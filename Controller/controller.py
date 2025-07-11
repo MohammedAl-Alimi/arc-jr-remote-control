@@ -6,6 +6,7 @@ import pygame
 import time
 # Importing sys for system-specific parameters (July 12th micro-commit)
 import sys
+# Importing json for configuration (July 11th micro-commit)
 import json
 import os
 
