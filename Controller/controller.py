@@ -4,6 +4,7 @@
 import pygame
 # Importing time for delays and timing (July 13th micro-commit)
 import time
+# Importing sys for system-specific parameters (July 12th micro-commit)
 import sys
 import json
 import os
