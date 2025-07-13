@@ -2,6 +2,7 @@
 # Micro change for July 15th, 2025
 # Importing pygame for controller support (July 14th micro-commit)
 import pygame
+# Importing time for delays and timing (July 13th micro-commit)
 import time
 import sys
 import json
