@@ -140,6 +140,7 @@ def apply_sensitivity(value, sensitivity, exponential):
 
 # Process stick input for control (July 7th micro-commit)
 def process_stick_input(raw_value, stick_type):
+    # Clarify: This processes the stick input with deadzone, sensitivity, and exponential curve (July 14th micro-commit 1)
     """Process raw stick input with deadzone, sensitivity, and exponential curve"""
     settings = CONTROL_SETTINGS[stick_type]
     
