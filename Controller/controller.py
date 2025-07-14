@@ -20,7 +20,7 @@ screen = pygame.display.set_mode((1, 1))
 pygame.display.set_caption("Controller Input")
 
 # Default control values
-lx, ly, rx, ry = 0.0, 0.0, 0.0, 0.0
+left_stick_x, ly, rx, ry = 0.0, 0.0, 0.0, 0.0  # Renamed lx to left_stick_x (July 14th micro-commit 4)
 controller_connected = False
 keyboard_active = False
 debug_mode = False
@@ -791,7 +791,7 @@ try:
                 elif event.key == pygame.K_n: display_connection_status()
         
         # Reset values each frame
-        lx, ly, rx, ry = 0.0, 0.0, 0.0, 0.0
+        left_stick_x, ly, rx, ry = 0.0, 0.0, 0.0, 0.0
         
         if controller_connected:
             # Check if controller got disconnected (July 14th micro-commit 2)
@@ -804,20 +804,20 @@ try:
             # Read controller axes if still connected
             if controller_connected:
                 # Get raw values and apply processing
-                raw_lx = joystick.get_axis(0)
+                raw_left_stick_x = joystick.get_axis(0)
                 raw_ly = joystick.get_axis(1)
                 raw_rx = joystick.get_axis(2)
                 raw_ry = joystick.get_axis(3)
                 
                 # Apply deadzone, sensitivity, and exponential curve
-                lx = process_stick_input(raw_lx, 'left_stick')
+                left_stick_x = process_stick_input(raw_left_stick_x, 'left_stick')
                 ly = process_stick_input(raw_ly, 'left_stick')
                 rx = process_stick_input(raw_rx, 'right_stick')
                 ry = process_stick_input(raw_ry, 'right_stick')
                 
                 # Apply auto-center if enabled
                 if auto_center:
-                    if abs(raw_lx) < 0.05: lx = 0.0
+                    if abs(raw_left_stick_x) < 0.05: left_stick_x = 0.0
                     if abs(raw_ly) < 0.05: ly = 0.0
                     if abs(raw_rx) < 0.05: rx = 0.0
                     if abs(raw_ry) < 0.05: ry = 0.0
@@ -842,8 +842,8 @@ try:
                 # Left stick emulation (movement)
                 if keys[pygame.K_w]: ly = -1.0
                 if keys[pygame.K_s]: ly = 1.0
-                if keys[pygame.K_a]: lx = -1.0
-                if keys[pygame.K_d]: lx = 1.0
+                if keys[pygame.K_a]: left_stick_x = -1.0
+                if keys[pygame.K_d]: left_stick_x = 1.0
                 
                 # Right stick emulation (hold Shift + WASD)
                 if keys[pygame.K_LSHIFT] or keys[pygame.K_RSHIFT]:
@@ -866,13 +866,13 @@ try:
         if debug_mode:
             timestamp = time.strftime("%H:%M:%S")
             # Initialize raw values for keyboard mode
-            raw_lx = raw_ly = raw_rx = raw_ry = 0.0
+            raw_left_stick_x = raw_ly = raw_rx = raw_ry = 0.0
             if controller_connected:
-                raw_lx = joystick.get_axis(0)
+                raw_left_stick_x = joystick.get_axis(0)
                 raw_ly = joystick.get_axis(1)
                 raw_rx = joystick.get_axis(2)
                 raw_ry = joystick.get_axis(3)
-            print(f"[{timestamp}] Frame:{frame_count} 🕹️  Left Stick: Raw(X={raw_lx:.2f} Y={raw_ly:.2f}) → Processed(X={lx:.2f} Y={ly:.2f})    |    Right Stick: Raw(X={raw_rx:.2f} Y={raw_ry:.2f}) → Processed(X={rx:.2f} Y={ry:.2f})", end='\r')
+            print(f"[{timestamp}] Frame:{frame_count} 🕹️  Left Stick: Raw(X={raw_left_stick_x:.2f} Y={raw_ly:.2f}) → Processed(X={left_stick_x:.2f} Y={ly:.2f})    |    Right Stick: Raw(X={raw_rx:.2f} Y={raw_ry:.2f}) → Processed(X={rx:.2f} Y={ry:.2f})", end='\r')
         else:
             recording_status = "🔴" if recording else "⚪"
             playback_status = "▶️" if playing else ""
@@ -885,18 +885,18 @@ try:
             debug_status = "DBG" if debug_mode else ""
             vibration_status = "VB" if vibration_enabled else ""
             theme_status = f"TH:{color_theme[:3].upper()}"
-            print(f"{recording_status}{playback_status}{mode_indicator}{battery_indicator} {sensitivity_info} {deadzone_info} {exp_info} {auto_center_status} {debug_status} {vibration_status} {theme_status} 🕹️  Left Stick: X={lx:.2f}  Y={ly:.2f}    |    Right Stick: X={rx:.2f}  Y={ry:.2f}", end='\r')
+            print(f"{recording_status}{playback_status}{mode_indicator}{battery_indicator} {sensitivity_info} {deadzone_info} {exp_info} {auto_center_status} {debug_status} {vibration_status} {theme_status} 🕹️  Left Stick: X={left_stick_x:.2f}  Y={ly:.2f}    |    Right Stick: X={rx:.2f}  Y={ry:.2f}", end='\r')
         
         # Record commands if recording is active
         if recording:
             current_time = time.time()
-            record_command('stick', {'lx': lx, 'ly': ly, 'rx': rx, 'ry': ry}, current_time)
+            record_command('stick', {'left_stick_x': left_stick_x, 'ly': ly, 'rx': rx, 'ry': ry}, current_time)
         
         # Playback recorded commands
         if playing:
             playback_command = get_next_playback_command()
             if playback_command and playback_command['type'] == 'stick':
-                lx = playback_command['values']['lx']
+                left_stick_x = playback_command['values']['left_stick_x']
                 ly = playback_command['values']['ly']
                 rx = playback_command['values']['rx']
                 ry = playback_command['values']['ry']
