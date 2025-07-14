@@ -792,7 +792,7 @@ try:
         lx, ly, rx, ry = 0.0, 0.0, 0.0, 0.0
         
         if controller_connected:
-            # Check if controller got disconnecgited
+            # Check if controller got disconnected (July 14th micro-commit 2)
             if pygame.joystick.get_count() == 0:
                 controller_connected = False
                 keyboard_active = True
