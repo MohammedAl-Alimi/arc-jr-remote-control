@@ -1,5 +1,6 @@
 # controller.py - Main interface for controlling the Arc Jr rover (Team FireFlies)
 # Micro change for July 15th, 2025
+# Importing pygame for controller support (July 14th micro-commit)
 import pygame
 import time
 import sys
