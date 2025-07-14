@@ -660,6 +660,8 @@ if not controller_connected:
     print("[MODE] Keyboard mode active.")
     keyboard_active = True
 
+# TODO: Add support for customizable key bindings (July 14th micro-commit 3)
+
 try:
     while True:
         # Process all events
