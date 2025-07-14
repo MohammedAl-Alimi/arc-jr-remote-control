@@ -1,5 +1,6 @@
+# --- July 14th, 2025 micro-commit batch: Clarifying top comment ---
 # controller.py - Main interface for controlling the Arc Jr rover (Team FireFlies)
-# Micro change for July 15th, 2025
+# Micro-commit for July 15th, 2025
 # Importing pygame for controller support (July 14th micro-commit)
 import pygame
 # Importing time for delays and timing (July 13th micro-commit)
@@ -84,7 +85,9 @@ CONTROL_SETTINGS = {
     }
 }
 
-# Button mapping for rover actions
+# TODO: Allow user to save/load custom control profiles (July 14th micro-commit batch)
+
+# Maps controller buttons to rover actions (July 14th micro-commit batch)
 button_actions = {
     'A': 'STOP',           # Emergency stop
     'B': 'TOGGLE_MODE',    # Toggle between manual/autonomous
@@ -289,7 +292,7 @@ def handle_button_release(button_name):
         print(f"\n🔘 Button {button_name} released: {action}")
 
 def print_control_settings():
-    """Print current control settings"""
+    """Prints the current sensitivity, deadzone, and exponential settings for both sticks (July 14th micro-commit batch)"""
     print("\n⚙️ Current Control Settings:")
     for stick_type, settings in CONTROL_SETTINGS.items():
         print(f"   {stick_type.replace('_', ' ').title()}:")
@@ -298,7 +301,7 @@ def print_control_settings():
         print(f"     Exponential: {settings['exponential']}")
 
 def save_current_settings():
-    """Save current settings to a JSON file"""
+    print("[DEBUG] save_current_settings called (July 14th micro-commit batch)")
     try:
         settings_file = "controller_settings.json"
         with open(settings_file, 'w') as f:
@@ -334,7 +337,7 @@ def toggle_debug_mode():
         print("   Showing processed stick values only")
 
 def set_sensitivity_preset(preset_name):
-    """Set quick sensitivity presets for both sticks"""
+    # Applies a preset to both sticks (July 14th micro-commit batch)
     presets = {
         'slow': {'sensitivity': 0.5, 'deadzone': 0.15, 'exponential': 1.2},
         'normal': {'sensitivity': 1.0, 'deadzone': 0.1, 'exponential': 1.5},
@@ -388,7 +391,7 @@ def toggle_vibration():
         print("   Vibration disabled")
 
 def cycle_color_theme():
-    """Cycle through different color themes"""
+    # Cycles through available color themes for the UI (July 14th micro-commit batch)
     global color_theme
     themes = {
         "default": "🎮",
@@ -407,6 +410,7 @@ def cycle_color_theme():
     print(f"   Console output will use {color_theme} theme")
 
 def toggle_sound():
+    # Toggles sound effects on/off (July 14th micro-commit batch)
     global sound_enabled
     sound_enabled = not sound_enabled
     print(f"\n🔊 Sound effects: {'ON' if sound_enabled else 'OFF'}")
@@ -417,6 +421,7 @@ def toggle_fullscreen():
     print(f"\n🖥️ Fullscreen: {'ON' if fullscreen else 'OFF'}")
 
 def toggle_border():
+    # Toggles the border around the controller window (July 14th micro-commit batch)
     global border_enabled
     border_enabled = not border_enabled
     print(f"\n🖼️ Border: {'ON' if border_enabled else 'OFF'}")
