@@ -1,3 +1,5 @@
+# controller.py - Main interface for controlling the Arc Jr rover (Team FireFlies)
+# Micro change for July 15th, 2025
 import pygame
 import time
 import sys
